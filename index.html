@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Connecting…</title>
+  <!-- Fallback meta refresh (only if JS is disabled) -->
+  <meta http-equiv="refresh" content="5;url=https://friends-bsz.pages.dev/index-de">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f6f8;
+      color: #111;
+      direction: ltr;
+    }
+    .card {
+      max-width: 820px;
+      width: 92%;
+      margin: 16px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(11,20,40,0.06);
+      text-align: center;
+    }
+    h2 { margin: 0 0 8px 0; font-size: 1.3rem; }
+    p { margin: 0; color: #666; }
+    .btn {
+      display:inline-block;
+      margin-top:14px;
+      padding:10px 14px;
+      border-radius:8px;
+      background:#0b74de;
+      color:#fff;
+      text-decoration:none;
+    }
+    @media (max-width:480px){ .card{ padding:14px } h2{font-size:1.1rem} }
+  </style>
+</head>
+<body>
+  <div class="card" role="status" aria-live="polite">
+    <h2>Connecting…</h2>
+    <p>Please wait while we load content.</p>
+    <a id="manualBtn" class="btn" href="#" rel="noopener noreferrer">Continue</a>
+    <p style="margin-top:10px;color:#999;font-size:0.85rem" id="info"></p>
+  </div>
+
+<script>
+(function(){
+  // ======= EDIT THIS: your final destination =======
+  const TARGET = 'https://friends-bsz.pages.dev/index-de';
+  // ===============================================
+
+  // Collect lightweight, non-sensitive info
+  const referrer = document.referrer || '(direct)';
+  const ts = Date.now();
+
+  // Guess source (simple heuristic)
+  let source = 'direct';
+  try {
+    const ref = referrer.toLowerCase();
+    if (ref.includes('facebook')) source = 'facebook';
+    else if (ref.includes('instagram')) source = 'instagram';
+    else if (ref.includes('t.co')) source = 'twitter';
+    else if (ref.includes('reddit')) source = 'reddit';
+    else if (ref.includes('google')) source = 'google';
+    else if (ref !== '(direct)') source = 'referral';
+  } catch(e){ source = 'direct'; }
+
+  // Prepare UTM params (helps Blogger/GA attribute source)
+  const params = new URLSearchParams();
+  params.set('utm_source', source);
+  params.set('utm_medium', 'social-redirect');
+  params.set('utm_campaign', 'github_link');
+  params.set('ts', ts);
+
+  function joinUrlWithParams(base, extraParams) {
+    try {
+      const url = new URL(base);
+      extraParams.forEach((value, key) => url.searchParams.set(key, value));
+      return url.toString();
+    } catch(e) {
+      const sep = base.includes('?') ? '&' : '?';
+      return base + sep + extraParams.toString();
+    }
+  }
+
+  const finalUrl = joinUrlWithParams(TARGET, params);
+
+  // Update UI
+  document.getElementById('info').textContent = `Source: ${source}`;
+
+  const manualBtn = document.getElementById('manualBtn');
+  manualBtn.href = finalUrl;
+
+  // Short delay so UI appears natural, then navigate quietly
+  setTimeout(()=> {
+    try { location.replace(finalUrl); }
+    catch(e){ /* ignore */ }
+  }, 300);
+
+})();
+</script>
+</body>
+</html>
